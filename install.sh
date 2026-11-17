@@ -14,9 +14,17 @@ swiftc -O -swift-version 5 -target arm64-apple-macos14.0 \
     Sources/*.swift -o "$APP/Contents/MacOS/Suflir"
 codesign --force --sign - "$APP"
 
-# The zip is what gets uploaded to a GitHub release.
-rm -f build/Suflir.zip
+# Two files for a GitHub release:
+#   Suflir.dmg  the download people open and drag to Applications
+#   Suflir.zip  what the one-line installer (docs/get.sh) fetches
+rm -f build/Suflir.zip build/Suflir.dmg
 ditto -c -k --keepParent "$APP" build/Suflir.zip
+
+STAGE="$(mktemp -d)"
+ditto "$APP" "$STAGE/Suflir.app"
+ln -s /Applications "$STAGE/Applications"
+hdiutil create -volname "Suflir" -srcfolder "$STAGE" -ov -format UDZO -quiet build/Suflir.dmg
+rm -rf "$STAGE"
 
 # Quit the running copy first so the new one can take its place.
 pkill -x Suflir 2>/dev/null || true
@@ -26,4 +34,4 @@ rm -rf /Applications/Suflir.app
 ditto "$APP" /Applications/Suflir.app
 open /Applications/Suflir.app
 echo "Installed /Applications/Suflir.app"
-echo "Release file: build/Suflir.zip"
+echo "Release files: build/Suflir.dmg and build/Suflir.zip"

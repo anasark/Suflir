@@ -12,8 +12,19 @@ right under the camera, so reading it looks like eye contact.
 
 ## Install
 
-Paste this in Terminal. It downloads the latest release, puts it in
-`/Applications` and opens it.
+Pick either way. Both install the same app.
+
+**1. Download**
+
+1. Download [Suflir.dmg](https://github.com/anasark/suflir/releases/latest/download/Suflir.dmg).
+2. Open it and drag Suflir into Applications.
+3. Open Suflir. macOS blocks it the first time, because the app is not signed
+   with a paid Apple developer account. Go to System Settings › Privacy &
+   Security and click "Open Anyway". You only do this once.
+
+**2. Terminal**
+
+Paste this line and press Return. There is no macOS warning this way.
 
 ```bash
 curl -fsSL https://suflir.anasabdur.com/get.sh | bash
@@ -31,15 +42,15 @@ Needs the Xcode command line tools.
 ```
 
 This builds the app, puts it in `/Applications` and opens it. Run it again
-after any code change. It also writes `build/Suflir.zip`, the file to upload
-when publishing a release.
+after any code change. It also writes `build/Suflir.dmg` and
+`build/Suflir.zip`, the files to upload when publishing a release.
 
 ## Publishing a release
 
 1. Run `./install.sh`.
-2. On GitHub, create a new release and attach `build/Suflir.zip`. Keep the
-   file name `Suflir.zip`, because the website and `get.sh` download the
-   latest release by that name.
+2. On GitHub, create a new release and attach both `build/Suflir.dmg` and
+   `build/Suflir.zip`. Keep those file names: the website downloads
+   `Suflir.dmg` and `get.sh` downloads `Suflir.zip` from the latest release.
 
 The website is the `docs/` folder, served by GitHub Pages.
 

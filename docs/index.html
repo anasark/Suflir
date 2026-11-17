@@ -126,7 +126,16 @@
   .small { font-size: 14px; color: var(--muted); }
   details { margin-top: 16px; }
   summary { cursor: pointer; color: var(--text); font-weight: 600; }
-  details ol { margin: 10px 0 0; padding-left: 22px; color: var(--muted); }
+  .ways { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; margin-bottom: 18px; }
+  .way { background: #0c0a1d80; border: 1px solid var(--line); border-radius: 14px; padding: 18px; min-width: 0; }
+  .way h3 { margin: 0 0 14px; font-size: 18px; display: flex; align-items: center; gap: 10px; }
+  .way .command { flex-direction: column; margin-bottom: 0; }
+  .way .command code { white-space: normal; overflow-wrap: anywhere; overflow: visible; font-size: 13px; }
+  .way .steps { margin: 16px 0 0; font-size: 15px; }
+  .tag { display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: var(--accent); color: #fff; font-size: 14px; }
+  .steps { margin: 20px 0 16px; padding-left: 22px; color: var(--muted); }
+  .steps li { margin-bottom: 6px; }
+  .steps b { color: var(--text); }
 
   section { padding: 54px 0 0; }
   section > h2 { font-size: 26px; margin: 0 0 18px; letter-spacing: -0.01em; }
@@ -166,25 +175,30 @@
 
   <div class="install" id="install">
     <h2>Install</h2>
-    <p>Open Terminal, paste this line and press Return. It downloads Suflir, puts it in Applications and opens it.</p>
-    <div class="command">
-      <code id="cmd">curl -fsSL https://suflir.anasabdur.com/get.sh | bash</code>
-      <button id="copy" type="button">Copy</button>
+    <p>Pick either way. Both install the same app.</p>
+    <div class="ways">
+      <div class="way">
+        <h3><span class="tag">1</span> Download</h3>
+        <a class="button primary" href="https://github.com/anasark/suflir/releases/latest/download/Suflir.dmg">Download Suflir.dmg</a>
+        <ol class="steps">
+          <li>Open <b>Suflir.dmg</b> and drag Suflir into Applications.</li>
+          <li>Open Suflir. macOS blocks it the first time, because the app is not signed with a paid Apple developer account.</li>
+          <li>In System Settings, go to Privacy &amp; Security and click <b>Open Anyway</b>. You only do this once.</li>
+        </ol>
+      </div>
+      <div class="way">
+        <h3><span class="tag">2</span> Terminal</h3>
+        <div class="command">
+          <code id="cmd">curl -fsSL https://suflir.anasabdur.com/get.sh | bash</code>
+          <button id="copy" type="button">Copy</button>
+        </div>
+        <ol class="steps">
+          <li>Open Terminal, paste the line above and press Return.</li>
+          <li>Suflir is downloaded, put in Applications and opened, with no macOS warning.</li>
+        </ol>
+      </div>
     </div>
-    <div class="buttons">
-      <a class="button primary" href="https://github.com/anasark/suflir/releases/latest/download/Suflir.zip">Download Suflir.zip</a>
-      <a class="button ghost" href="https://github.com/anasark/suflir">Source on GitHub</a>
-    </div>
-    <p class="small" style="margin:14px 0 0">Free and open source. Needs a Mac with Apple silicon (M1 or newer) and macOS 14 or later.</p>
-    <details>
-      <summary>Downloaded the zip and macOS will not open it?</summary>
-      <ol>
-        <li>Unzip the file and drag Suflir into the Applications folder.</li>
-        <li>Open Suflir once. macOS shows a warning, because the app is not signed with a paid Apple developer account.</li>
-        <li>Open System Settings, go to Privacy &amp; Security, scroll down and click "Open Anyway" next to Suflir.</li>
-      </ol>
-      <p class="small" style="margin-top:10px">The Terminal command above skips these steps.</p>
-    </details>
+    <p class="small" style="margin:0">Free and open source · <a href="https://github.com/anasark/suflir">Source on GitHub</a> · Needs a Mac with Apple silicon (M1 or newer) and macOS 14 or later.</p>
   </div>
 
   <section>
