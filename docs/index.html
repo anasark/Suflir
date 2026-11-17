@@ -9,6 +9,14 @@
 <meta property="og:description" content="Your script sits right under the camera and scrolls as you speak. Free, open source, no word limit.">
 <meta property="og:image" content="https://suflir.anasabdur.com/icon.png">
 <link rel="icon" href="icon.png">
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-1SBS1PEF1M"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-1SBS1PEF1M');
+</script>
 <style>
   :root {
     --bg: #0c0a1d;
@@ -179,7 +187,7 @@
     <div class="ways">
       <div class="way">
         <h3><span class="tag">1</span> Download</h3>
-        <a class="button primary" href="https://github.com/anasark/suflir/releases/latest/download/Suflir.dmg">Download Suflir.dmg</a>
+        <a class="button primary" id="download" href="https://github.com/anasark/suflir/releases/latest/download/Suflir.dmg">Download Suflir.dmg</a>
         <ol class="steps">
           <li>Open <b>Suflir.dmg</b> and drag Suflir into Applications.</li>
           <li>Open Suflir. macOS blocks it the first time, because the app is not signed with a paid Apple developer account.</li>
@@ -209,7 +217,7 @@
       <div class="card"><h3>No word limit</h3><p>Paste a five minute pitch or an hour long lecture. Keep as many scripts as you like in the library.</p></div>
       <div class="card"><h3>Hidden from screen sharing</h3><p>The prompter can stay out of screen shares and recordings, so only you see it.</p></div>
       <div class="card"><h3>Out of the way</h3><p>It lives in the menu bar, never steals focus, and can be made see-through.</p></div>
-      <div class="card"><h3>Private</h3><p>No account and no tracking. Your scripts stay on your Mac.</p></div>
+      <div class="card"><h3>Private</h3><p>The app needs no account and collects nothing. Your scripts stay on your Mac.</p></div>
     </div>
   </section>
 
@@ -230,8 +238,13 @@
 
 </div>
 <script>
+  // Events for Google Analytics: how many people start an install.
+  const track = (name) => { if (typeof gtag === 'function') gtag('event', name); };
+  document.getElementById('download').addEventListener('click', () => track('download_dmg'));
+
   const button = document.getElementById('copy');
   button.addEventListener('click', async () => {
+    track('copy_install_command');
     const text = document.getElementById('cmd').textContent;
     try {
       await navigator.clipboard.writeText(text);
