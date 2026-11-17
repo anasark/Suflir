@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Suflir · A free teleprompter for the MacBook notch</title>
+<meta name="description" content="Suflir puts your script right under the MacBook camera and scrolls as you speak. Free, open source, no word limit.">
+<meta property="og:title" content="Suflir · A free teleprompter for the MacBook notch">
+<meta property="og:description" content="Your script sits right under the camera and scrolls as you speak. Free, open source, no word limit.">
+<meta property="og:image" content="https://suflir.anasabdur.com/icon.png">
+<link rel="icon" href="icon.png">
+<style>
+  :root {
+    --bg: #0c0a1d;
+    --panel: #15122e;
+    --line: #2a2552;
+    --text: #f2f0ff;
+    --muted: #a9a4cf;
+    --accent: #6b5cff;
+    --accent-strong: #8172ff;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: radial-gradient(1100px 600px at 50% -150px, #2b2370 0%, var(--bg) 60%) no-repeat var(--bg);
+    color: var(--text);
+    font: 17px/1.6 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--accent-strong); }
+  .wrap { max-width: 860px; margin: 0 auto; padding: 0 20px; }
+
+  header { text-align: center; padding: 56px 0 28px; }
+  header img { width: 112px; height: 112px; }
+  h1 { font-size: clamp(34px, 6vw, 54px); line-height: 1.1; margin: 10px 0 14px; letter-spacing: -0.02em; }
+  .lead { color: var(--muted); font-size: clamp(17px, 2.4vw, 20px); max-width: 600px; margin: 0 auto; }
+
+  /* A small picture of the product: the top of a screen, the notch, the script. */
+  .screen {
+    margin: 40px auto 0;
+    height: 190px;
+    border: 1px solid var(--line);
+    border-bottom: 0;
+    border-radius: 18px 18px 0 0;
+    background: linear-gradient(#1b1740, #110e28);
+    position: relative;
+    overflow: hidden;
+  }
+  .strip {
+    position: absolute;
+    top: 0; left: 50%;
+    transform: translateX(-50%);
+    width: min(78%, 400px);
+    background: #000;
+    border-radius: 0 0 18px 18px;
+    padding: 34px 18px 16px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+  .strip::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 44%; height: 24px;
+    background: #000;
+    border-radius: 0 0 12px 12px;
+    box-shadow: 0 0 0 1px #1d1d1d;
+  }
+  .strip::after {
+    content: "";
+    position: absolute;
+    top: 8px; left: 50%;
+    width: 7px; height: 7px;
+    margin-left: -3px;
+    border-radius: 50%;
+    background: #23233a;
+  }
+  .read { color: rgba(255, 255, 255, 0.35); }
+
+  .install {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 0 0 18px 18px;
+    padding: 26px;
+  }
+  .install h2 { margin: 0 0 6px; font-size: 22px; }
+  .install p { margin: 0 0 14px; color: var(--muted); }
+  .command {
+    display: flex;
+    gap: 10px;
+    align-items: stretch;
+    margin-bottom: 18px;
+  }
+  .command code {
+    flex: 1;
+    min-width: 0;
+    overflow-x: auto;
+    white-space: nowrap;
+    background: #07061280;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 12px 14px;
+    font: 14px/1.5 ui-monospace, "SF Mono", Menlo, monospace;
+    color: #dcd8ff;
+  }
+  button, .button {
+    font: inherit;
+    font-weight: 600;
+    border: 0;
+    border-radius: 10px;
+    padding: 12px 18px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+  }
+  #copy { background: var(--accent); color: #fff; min-width: 84px; }
+  #copy:hover, .button.primary:hover { background: var(--accent-strong); }
+  .button.primary { background: var(--accent); color: #fff; }
+  .button.ghost { background: transparent; color: var(--text); border: 1px solid var(--line); }
+  .button.ghost:hover { border-color: var(--accent); }
+  .buttons { display: flex; flex-wrap: wrap; gap: 10px; }
+  .small { font-size: 14px; color: var(--muted); }
+  details { margin-top: 16px; }
+  summary { cursor: pointer; color: var(--text); font-weight: 600; }
+  details ol { margin: 10px 0 0; padding-left: 22px; color: var(--muted); }
+
+  section { padding: 54px 0 0; }
+  section > h2 { font-size: 26px; margin: 0 0 18px; letter-spacing: -0.01em; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 18px; }
+  .card h3 { margin: 0 0 6px; font-size: 17px; }
+  .card p { margin: 0; color: var(--muted); font-size: 15px; }
+
+  table { width: 100%; border-collapse: collapse; }
+  td { padding: 10px 0; border-bottom: 1px solid var(--line); }
+  td:first-child { font: 15px ui-monospace, "SF Mono", Menlo, monospace; white-space: nowrap; padding-right: 20px; }
+  td:last-child { color: var(--muted); }
+
+  footer { text-align: center; color: var(--muted); font-size: 15px; padding: 60px 0 44px; }
+
+  @media (max-width: 520px) {
+    .command { flex-direction: column; }
+    .screen { height: 170px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <img src="icon.png" alt="Suflir icon">
+    <h1>Read your script.<br>Keep eye contact.</h1>
+    <p class="lead">Suflir is a free teleprompter that sits under the MacBook notch, right next to the camera, and scrolls as you speak. No word limit.</p>
+  </header>
+
+  <div class="screen" aria-hidden="true">
+    <div class="strip">
+      <span class="read">Thanks for joining me today. I want to</span>
+      share three things we learned this quarter, and what they mean for next year.
+    </div>
+  </div>
+
+  <div class="install" id="install">
+    <h2>Install</h2>
+    <p>Open Terminal, paste this line and press Return. It downloads Suflir, puts it in Applications and opens it.</p>
+    <div class="command">
+      <code id="cmd">curl -fsSL https://suflir.anasabdur.com/get.sh | bash</code>
+      <button id="copy" type="button">Copy</button>
+    </div>
+    <div class="buttons">
+      <a class="button primary" href="https://github.com/anasark/suflir/releases/latest/download/Suflir.zip">Download Suflir.zip</a>
+      <a class="button ghost" href="https://github.com/anasark/suflir">Source on GitHub</a>
+    </div>
+    <p class="small" style="margin:14px 0 0">Free and open source. Needs a Mac with Apple silicon (M1 or newer) and macOS 14 or later.</p>
+    <details>
+      <summary>Downloaded the zip and macOS will not open it?</summary>
+      <ol>
+        <li>Unzip the file and drag Suflir into the Applications folder.</li>
+        <li>Open Suflir once. macOS shows a warning, because the app is not signed with a paid Apple developer account.</li>
+        <li>Open System Settings, go to Privacy &amp; Security, scroll down and click "Open Anyway" next to Suflir.</li>
+      </ol>
+      <p class="small" style="margin-top:10px">The Terminal command above skips these steps.</p>
+    </details>
+  </div>
+
+  <section>
+    <h2>What it does</h2>
+    <div class="grid">
+      <div class="card"><h3>Follows your voice</h3><p>The text moves as you speak and waits when you pause. Words you have said fade out so you never lose your place.</p></div>
+      <div class="card"><h3>Or a steady scroll</h3><p>Prefer a fixed pace? Pick a speed and let it roll.</p></div>
+      <div class="card"><h3>No word limit</h3><p>Paste a five minute pitch or an hour long lecture. Keep as many scripts as you like in the library.</p></div>
+      <div class="card"><h3>Hidden from screen sharing</h3><p>The prompter can stay out of screen shares and recordings, so only you see it.</p></div>
+      <div class="card"><h3>Out of the way</h3><p>It lives in the menu bar, never steals focus, and can be made see-through.</p></div>
+      <div class="card"><h3>Private</h3><p>No account and no tracking. Your scripts stay on your Mac.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Shortcuts</h2>
+    <table>
+      <tr><td>⌃⌥Space</td><td>Start or pause</td></tr>
+      <tr><td>⌃⌥P</td><td>Show or hide the prompter</td></tr>
+      <tr><td>⌃⌥↑ &nbsp; ⌃⌥↓</td><td>Scroll back or forward</td></tr>
+      <tr><td>⌃⌥R</td><td>Restart from the top</td></tr>
+      <tr><td>⌃⌥E</td><td>Open the script editor</td></tr>
+    </table>
+  </section>
+
+  <footer>
+    Made by <a href="https://anasabdur.com">anasabdur.com</a> · MIT License
+  </footer>
+
+</div>
+<script>
+  const button = document.getElementById('copy');
+  button.addEventListener('click', async () => {
+    const text = document.getElementById('cmd').textContent;
+    try {
+      await navigator.clipboard.writeText(text);
+      button.textContent = 'Copied';
+    } catch {
+      // Clipboard access can be blocked; select the text so it can be copied by hand.
+      const range = document.createRange();
+      range.selectNodeContents(document.getElementById('cmd'));
+      const selection = getSelection();
+      selection.removeAllRanges();
+      selection.addRange(range);
+      button.textContent = 'Press ⌘C';
+    }
+    setTimeout(() => { button.textContent = 'Copy'; }, 1800);
+  });
+</script>
+</body>
+</html>
